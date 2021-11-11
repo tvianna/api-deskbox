@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  password String
+  name  String
+  status Int
+  createdAt  DateTime   @default(now())
+  createdBy Int
+  deletedAt  DateTime?
+  deletedBy Int?
+  availableSchedulesUser Available_Schedule[] @relation("availableSchedulesUser")
+  schedulesUser Schedule[] @relation("schedulesUser")
+}
+
+model Area {
+  id        Int      @default(autoincrement()) @id
+  title     String
+  description   String?
+  status    Boolean? @default(false)
+  availableSchedule Available_Schedule?  @relation("areasAvailableSchedulesArea", fields: [idAvailableSchedule], references: [id])
+  idAvailableSchedule Int
+  createdAt  DateTime   @default(now())
+  createdBy Int
+  deletedAt  DateTime?
+  deletedBy Int? 
+  desks Desk[]
+  availableSchedulesArea Available_Schedule[] @relation("availableSchedulesArea")
+  schedule Schedule[] @relation("areaSchedule")
+}
+
+model Desk {
+  id        Int      @default(autoincrement()) @id
+  title     String
+  description   String?
+  status    Boolean @default(false)
+  area    Area    @relation(fields: [idArea], references: [id])
+  idArea   Int
+  availableSchedule Available_Schedule?  @relation("desksAvailableSchedulesArea", fields: [idAvailableSchedule], references: [id])
+  idAvailableSchedule Int
+  createdAt  DateTime   @default(now())
+  createdBy Int
+  deletedAt  DateTime?
+  deletedBy Int?
+  availableSchedulesDesk Available_Schedule[] @relation("availableSchedulesDesk")
+  schedule Schedule[] @relation("deskSchedule")
+}
+
+model Available_Schedule {
+  id Int      @default(autoincrement()) @id
+  user User @relation("availableSchedulesUser", fields: [idUser], references: [id])
+  idUser Int
+  area    Area    @relation("availableSchedulesArea", fields: [idArea], references: [id])
+  idArea    Int
+  desk    Desk    @relation("availableSchedulesDesk", fields: [idDesk], references: [id])
+  idDesk    Int
+  startDate    DateTime
+  endDate    DateTime
+  weekend    Boolean @default(false)
+  desks Desk[] @relation("desksAvailableSchedulesArea")
+  areas Area[] @relation("areasAvailableSchedulesArea")
+}
+
+model Schedule {
+  id Int      @default(autoincrement()) @id
+  user    User   @relation("schedulesUser", fields: [idUser], references: [id])
+  idUser    Int
+  area    Area     @relation("areaSchedule", fields: [idArea], references: [id])
+  idArea    Int
+  desk    Desk    @relation("deskSchedule", fields: [idDesk], references: [id])
+  idDesk    Int
+  startDate    DateTime
+  endDate    DateTime
+  weekend    Boolean @default(false)
+
+}
