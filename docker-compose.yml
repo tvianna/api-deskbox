@@ -1,0 +1,34 @@
+version: '3.1'
+services:
+    deskbox-mysql:
+        image: mysql
+        container_name: deskbox-mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: DESKBOX
+            MYSQL_PASSWORD: DESKBOX
+            MYSQL_DATABASE: deskbox-mysql
+        ports:
+            - "3306:3306"
+    dev:
+        container_name: deskbox-api-dev
+        image: nestjs-api-dev:1.0.0
+        build:
+            context: .
+            target: development
+            dockerfile: ./Dockerfile
+        command: >
+            sh -c "npx prisma generate && npx prisma migrate dev --name init && npm
+            run start:debug"
+        ports:
+            - 3000:3000
+            - 9229:9229
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
+        restart: unless-stopped
+        depends_on:
+            - deskbox-mysql
+        links:
+            - deskbox-mysql
