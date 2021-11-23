@@ -11,77 +11,68 @@ datasource db {
 }
 
 model User {
-  id                     Int                  @id @default(autoincrement())
-  email                  String               @unique
-  password               String
-  name                   String
-  status                 Int
-  createdAt              DateTime             @default(now())
-  createdBy              Int
-  deletedAt              DateTime?
-  deletedBy              Int?
-  availableSchedulesUser Available_Schedule[] @relation("availableSchedulesUser")
-  schedulesUser          Schedule[]           @relation("schedulesUser")
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  password String
+  name  String
+  status Int
+  createdAt  DateTime   @default(now())
+  createdBy Int
+  deletedAt  DateTime?
+  deletedBy Int?
+  schedulesUser Schedule[] @relation("schedulesUser")
 }
 
-model Area {
-  id                     Int                  @id @default(autoincrement())
-  title                  String
-  description            String?
-  status                 Boolean?             @default(false)
-  availableSchedule      Available_Schedule?  @relation("areasAvailableSchedulesArea", fields: [idAvailableSchedule], references: [id])
-  idAvailableSchedule    Int
-  createdAt              DateTime             @default(now())
-  createdBy              Int
-  deletedAt              DateTime?
-  deletedBy              Int?
-  desks                  Desk[]
-  availableSchedulesArea Available_Schedule[] @relation("availableSchedulesArea")
-  schedule               Schedule[]           @relation("areaSchedule")
-}
+// model Area {
+//   id        Int      @default(autoincrement()) @id
+//   title     String
+//   description   String?
+//   status    Boolean? @default(false)
+//   createdAt  DateTime   @default(now())
+//   createdBy Int
+//   deletedAt  DateTime?
+//   deletedBy Int? 
+//   desks Desk[]
+//   availableSchedulesArea Available_Schedule[] @relation("availableSchedulesArea")
+//   schedule Schedule[] @relation("areaSchedule")
+// }
 
 model Desk {
-  id                     Int                  @id @default(autoincrement())
-  title                  String
-  description            String?
-  status                 Boolean              @default(false)
-  area                   Area                 @relation(fields: [idArea], references: [id])
-  idArea                 Int
-  availableSchedule      Available_Schedule?  @relation("desksAvailableSchedulesArea", fields: [idAvailableSchedule], references: [id])
-  idAvailableSchedule    Int
-  createdAt              DateTime             @default(now())
-  createdBy              Int
-  deletedAt              DateTime?
-  deletedBy              Int?
+  id        Int      @default(autoincrement()) @id
+  title     String
+  description   String?
+  status    Boolean @default(false)
+  // area    Area    @relation(fields: [idArea], references: [id])
+  // idArea   Int
+  createdAt  DateTime   @default(now())
+  createdBy Int
+  deletedAt  DateTime?
+  deletedBy Int?
   availableSchedulesDesk Available_Schedule[] @relation("availableSchedulesDesk")
-  schedule               Schedule[]           @relation("deskSchedule")
+  schedule Schedule[] @relation("deskSchedule")
 }
 
 model Available_Schedule {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation("availableSchedulesUser", fields: [idUser], references: [id])
-  idUser    Int
-  area      Area     @relation("availableSchedulesArea", fields: [idArea], references: [id])
-  idArea    Int
-  desk      Desk     @relation("availableSchedulesDesk", fields: [idDesk], references: [id])
-  idDesk    Int
-  startDate DateTime
-  endDate   DateTime
-  weekend   Boolean  @default(false)
-  desks     Desk[]   @relation("desksAvailableSchedulesArea")
-  areas     Area[]   @relation("areasAvailableSchedulesArea")
+  id Int      @default(autoincrement()) @id
+  // area    Area?    @relation("availableSchedulesArea", fields: [idArea], references: [id])
+  // idArea    Int?
+  desk    Desk?    @relation("availableSchedulesDesk", fields: [idDesk], references: [id])
+  idDesk    Int?
+  startDate    DateTime
+  endDate    DateTime
+  // weekend    Boolean @default(false)
 }
 
 model Schedule {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation("schedulesUser", fields: [idUser], references: [id])
+  id Int      @default(autoincrement()) @id
+  user    User   @relation("schedulesUser", fields: [idUser], references: [id])
   idUser    Int
-  area      Area     @relation("areaSchedule", fields: [idArea], references: [id])
-  idArea    Int
-  desk      Desk     @relation("deskSchedule", fields: [idDesk], references: [id])
+  // area    Area     @relation("areaSchedule", fields: [idArea], references: [id])
+  // idArea    Int
+  desk    Desk    @relation("deskSchedule", fields: [idDesk], references: [id])
   idDesk    Int
-  startDate DateTime
-  endDate   DateTime
-  weekend   Boolean  @default(false)
+  startDate    DateTime
+  endDate    DateTime
+  // weekend    Boolean @default(false)
 
 }
