@@ -13,8 +13,8 @@ export class CreateDeskDto {
   @IsBoolean()
   status: boolean;
 
-  @IsNotEmpty()
-  @IsInt()
+  // @IsNotEmpty()
+  // @IsInt()
   createdBy: number;
 
   // @IsNotEmpty()

@@ -10,6 +10,7 @@ export class DeskService {
     return this.prisma.desk.create({
       data: {
         createdAt: new Date(),
+        createdBy: 1,
         ...createDeskDto,
       },
     });
