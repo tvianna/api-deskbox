@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsInt,
@@ -7,14 +8,17 @@ import {
 } from 'class-validator';
 
 export class UpdateDeskDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   title: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   description: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsBoolean()
   status: boolean;

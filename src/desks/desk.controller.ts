@@ -10,12 +10,18 @@ import {
 import { DeskService } from './desk.service';
 import { CreateDeskDto } from './dto/create-desk.dto';
 import { UpdateDeskDto } from './dto/update-desk.dto';
+import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
 
 @Controller('desks')
 export class DeskController {
   constructor(private readonly desksService: DeskService) {}
 
   @Post()
+  @ApiCreatedResponse({
+    status: 201,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   create(@Body() createDeskDto: CreateDeskDto) {
     return this.desksService.create(createDeskDto);
   }
