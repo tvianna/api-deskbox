@@ -7,13 +7,19 @@ import { UpdateDeskDto } from './dto/update-desk.dto';
 export class DeskService {
   constructor(private prisma: PrismaService) {}
   create(createDeskDto: CreateDeskDto) {
-    return this.prisma.desk.create({
+    const desk = { createDeskDto };
+
+    this.prisma.desk.create({
       data: {
         createdAt: new Date(),
         createdBy: 1,
         ...createDeskDto,
       },
     });
+
+    return `The record has been successfully created: ${JSON.stringify(
+      desk.createDeskDto,
+    )}`;
   }
 
   findAll() {
