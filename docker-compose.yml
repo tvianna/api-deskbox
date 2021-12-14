@@ -2,6 +2,8 @@ version: '3.1'
 services:
     deskbox-mysql:
         image: mysql
+        cap_add:
+         - SYS_NICE  # CAP_SYS_NICE
         container_name: deskbox-mysql
         restart: always
         environment:
